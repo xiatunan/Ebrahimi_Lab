@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 ####################
 root = tk.Tk()
 root.title('baselinebox')
-root.geometry('256x512')
+root.geometry('512x512')
 root.update()
 varf = tk.StringVar()
 vard = tk.StringVar()
@@ -28,35 +28,35 @@ varpa = tk.StringVar()
 
 e_f = tk.Entry(root, textvariable=varf)
 varf.set('data filename')
-e_f.pack()
+e_f.place(x=16, y=16, width=160, height=32)
 
 e_d = tk.Entry(root, textvariable=vard)
 vard.set('cols or rows')
-e_d.pack()
+e_d.place(x=16, y=48, width=160, height=32)
 
 e_ln = tk.Entry(root, textvariable=varln)
 varln.set('line number')
-e_ln.pack()
+e_ln.place(x=16, y=80, width=160, height=32)
 
 e_h = tk.Entry(root, textvariable=varh)
 varh.set('number of header lines')
-e_h.pack()
+e_h.place(x=16, y=112, width=160, height=32)
 
 e_p = tk.Entry(root, textvariable=varp)
-varp.set('background line number')
-e_p.pack()
+varp.set('background line')
+e_p.place(x=16, y=144, width=160, height=32)
 
 e_s = tk.Entry(root, textvariable=varst)
 varst.set('start point')
-e_s.pack()
+e_s.place(x=16, y=176, width=160, height=32)
 
 e_e = tk.Entry(root, textvariable=vare)
 vare.set('end point')
-e_e.pack()
+e_e.place(x=16, y=208, width=160, height=32)
 
 e_pa = tk.Entry(root, textvariable=varpa)
 varpa.set('segment number')
-e_pa.pack()
+e_pa.place(x=16, y=240, width=160, height=32)
 
 
 def hit():
@@ -72,7 +72,7 @@ def hit():
 
 
 b_a = tk.Button(root, text='apply', command=hit)
-b_a.pack()
+b_a.place(x=16, y=272, width=160, height=32)
 ####################
 
 
@@ -229,13 +229,13 @@ def begin():
 
 
 b_s = tk.Button(root, text='draw', command=begin)
-b_s.pack()
+b_s.place(x=16, y=304, width=160, height=32)
 ####################
 ####################
 varsa = tk.StringVar()
 e_sa = tk.Entry(root, textvariable=varsa)
 varsa.set('total segments')
-e_sa.pack()
+e_sa.place(x=16, y=336, width=160, height=32)
 
 
 def shows():
@@ -244,7 +244,7 @@ def shows():
 
 
 b_3 = tk.Button(root, text='fix baseline', command=shows)
-b_3.pack()
+b_3.place(x=16, y=368, width=160, height=32)
 
 basepoints_Y = []
 basepoints_X = []
@@ -281,8 +281,26 @@ def conpound():
             basepoints_Y.append(valuey[ti])
 
 
+def bubble():
+    global basepoints_X, basepoints_Y
+    for i in range(len(basepoints_X) - 1):
+        for j in range(len(basepoints_X) - 1 - i):
+            if basepoints_X[j] > basepoints_X[j + 1]:
+                a = basepoints_X[j]
+                b = basepoints_X[j + 1]
+                ay = basepoints_Y[j]
+                by = basepoints_Y[j + 1]
+                basepoints_X[j] = b
+                basepoints_X[j + 1] = a
+                basepoints_Y[j] = by
+                basepoints_Y[j + 1] = ay
+            else:
+                continue
+
+
 def main_2():
     conpound()
+    bubble()
     x_new = curve_list_x()
     tck = interpolate.splrep(basepoints_X, basepoints_Y)
     y_b = interpolate.splev(x_new, tck)
@@ -302,7 +320,7 @@ def main_2():
 
 
 b_4 = tk.Button(root, text='show', command=main_2)
-b_4.pack()
+b_4.place(x=16, y=400, width=160, height=32)
 
 
 def refresh():
@@ -312,29 +330,41 @@ def refresh():
 
 
 b_re = tk.Button(root, text='refresh', command=refresh)
-b_re.pack()
+b_re.place(x=16, y=432, width=160, height=32)
 ####################
 vartf = tk.StringVar()
 e_tf = tk.Entry(root, textvariable=vartf)
 vartf.set('name of final figure')
-e_tf.pack()
+e_tf.place(x=336, y=16, width=160, height=32)
 
 varxl1 = tk.StringVar()
 e_xl1 = tk.Entry(root, textvariable=varxl1)
 varxl1.set('lower limit of x axis')
-e_xl1.pack()
+e_xl1.place(x=336, y=48, width=160, height=32)
 
 varxl2 = tk.StringVar()
 e_xl2 = tk.Entry(root, textvariable=varxl2)
 varxl2.set('upper limit of x axis')
-e_xl2.pack()
+e_xl2.place(x=336, y=80, width=160, height=32)
+
+varyl1 = tk.StringVar()
+e_yl1 = tk.Entry(root, textvariable=varyl1)
+varyl1.set('lower limit of y axis')
+e_yl1.place(x=336, y=112, width=160, height=32)
+
+varyl2 = tk.StringVar()
+e_yl2 = tk.Entry(root, textvariable=varyl2)
+varyl2.set('upper limit of y axis')
+e_yl2.place(x=336, y=144, width=160, height=32)
 
 
 def main_3():
-    global figurename, xlim1, xlim2
+    global figurename, xlim1, xlim2, ylim1, ylim2
     figurename = str(vartf.get().strip())
     xlim1 = float(varxl1.get().strip())
     xlim2 = float(varxl2.get().strip())
+    ylim1 = float(varyl1.get().strip())
+    ylim2 = float(varyl2.get().strip())
     colortable = ['black', 'brown', 'red', 'chocolate', 'darkorange', 'gold', 'lawngreen', 'seagreen', 'darkcyan', 'slategray', 'blue', 'purple', 'deeppink']
     excel_data = xr.open_workbook(str(filename))
     table_raw = excel_data.sheets()[0]
@@ -358,6 +388,7 @@ def main_3():
         plt.ylabel(r'$\Delta I / \mu A$')
         plt.title(str(figurename))
         plt.xlim(xlim1, xlim2)
+        plt.ylim(ylim1, ylim2)
         plt.legend(pic_object, label_object, loc='best')
         plt.savefig('result.pdf')
         plt.show()
@@ -379,6 +410,7 @@ def main_3():
         plt.ylabel(r'$\Delta I / \mu A$')
         plt.title(str(figurename))
         plt.xlim(xlim1, xlim2)
+        plt.ylim(ylim1, ylim2)
         plt.title(str(figurename))
         plt.legend(pic_object, label_object, loc='best')
         plt.savefig('result.pdf')
@@ -386,7 +418,69 @@ def main_3():
 
 
 b_5 = tk.Button(root, text='conclusion', command=main_3)
-b_5.pack()
+b_5.place(x=336, y=176, width=160, height=32)
+
+
+def original_main():
+    global figurename, xlim1, xlim2, line_number, ylim1, ylim2
+    figurename = str(vartf.get().strip())
+    xlim1 = float(varxl1.get().strip())
+    xlim2 = float(varxl2.get().strip())
+    ylim1 = float(varyl1.get().strip())
+    ylim2 = float(varyl2.get().strip())
+    colortable = ['black', 'brown', 'red', 'chocolate', 'darkorange', 'gold', 'lawngreen', 'seagreen', 'darkcyan', 'slategray', 'blue', 'purple', 'deeppink']
+    excel_data = xr.open_workbook(str(filename))
+    table_raw = excel_data.sheets()[0]
+    ncols = table_raw.ncols
+    nrows = table_raw.nrows
+    if dim == 'cols':
+        pic_object = []
+        label_object = []
+        plt.figure()
+        for i in range(ncols - 1):
+            if os.path.exists(col_title(i + 1)+'_curve_X.csv'):
+                matrixoX2 = col_selector(0, header)
+                matrixoY2 = col_selector(i + 1, header)
+                plt.subplot(1, 1, 1)
+                li, = plt.plot(matrixoX2, matrixoY2, color=colortable[i], linewidth=2.0)
+                pic_object.append(li)
+                label_object.append(col_title(i + 1))
+            else:
+                continue
+        plt.xlabel('potential/V')
+        plt.ylabel(r'$\Delta I / \mu A$')
+        plt.title('raw curve of '+str(figurename))
+        plt.xlim(xlim1, xlim2)
+        plt.ylim(ylim1, ylim2)
+        plt.legend(pic_object, label_object, loc='best')
+        plt.savefig('result_r.pdf')
+        plt.show()
+    if dim == 'rows':
+        pic_object = []
+        label_object = []
+        plt.figure()
+        for i in range(nrows - 1):
+            if os.path.exists(row_title(i + 1)+'_curve_X.csv'):
+                matrixoX2 = row_selector(0, header)
+                matrixoY2 = row_selector(i + 1, header)
+                plt.subplot(1, 1, 1)
+                li, = plt.plot(matrixoX2, matrixoY2, color=colortable[i], linewidth=2.0)
+                pic_object.append(li)
+                label_object.append(col_title(i + 1))
+            else:
+                continue
+        plt.xlabel('potential/V')
+        plt.ylabel(r'$\Delta I / \mu A$')
+        plt.title('raw curve of '+str(figurename))
+        plt.xlim(xlim1, xlim2)
+        plt.ylim(ylim1, ylim2)
+        plt.legend(pic_object, label_object, loc='best')
+        plt.savefig('result_r.pdf')
+        plt.show()
+
+
+b_6 = tk.Button(root, text='raw curve', command=original_main)
+b_6.place(x=336, y=208, width=160, height=32)
 ####################
 root.mainloop()
 ####################
